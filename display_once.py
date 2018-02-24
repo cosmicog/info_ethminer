@@ -57,6 +57,12 @@ class FlyInfo:
         json_dict = response.json()
         return json_dict
 
+    def strI0(self, value): # returns integer's str or '0.0'
+        try:
+            return str(int(value))
+        except:
+            return '0.0'
+
     def strF0(self, value, perc=None): # returns float's str or '0.0'
         try:
             if perc == None:
@@ -64,7 +70,7 @@ class FlyInfo:
             else:
                 return str(perc % float(value))
         except:
-            return '0.0'
+            return '0'
 
     def printDotInfo(self, info=None):
         if info == None:
@@ -94,9 +100,9 @@ class FlyInfo:
              ]
         table1.append(row1)
         row2 = [Color('{autoyellow}Mined Total{/autoyellow}\n{autocyan}'  + self.strF0(total_mined, "%.7f" )         + '{/autocyan} ZEC'),
-                Color('{autoyellow}Accepted{/autoyellow}\n'+'{autogreen}' + self.strF0(self.miner_["validShares"])   + '{/autogreen}'),
-                Color('{autoyellow}Rejected{/autoyellow}\n'+'{autored}'   + self.strF0(self.miner_["invalidShares"]) + '{/autored}'),
-                Color('{autoyellow}Workers{/autoyellow}\n'                + self.strF0(self.miner_["activeWorkers"])),
+                Color('{autoyellow}Accepted{/autoyellow}\n'+'{autogreen}' + self.strI0(self.miner_["validShares"])   + '{/autogreen}'),
+                Color('{autoyellow}Rejected{/autoyellow}\n'+'{autored}'   + self.strI0(self.miner_["invalidShares"]) + '{/autored}'),
+                Color('{autoyellow}Workers{/autoyellow}\n'                + self.strI0(self.miner_["activeWorkers"])),
              ]
         table1.append(row2)
         row3 = [Color('{autoyellow}ZEC {/autoyellow}${autogreen}'         + self.strF0(self.ZEC_usd_) + '{/autogreen}\n{autoyellow}BTC {/autoyellow}${autogreen}' + str(self.BTC_usd_) + '{/autogreen}'),
