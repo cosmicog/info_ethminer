@@ -35,29 +35,32 @@ If you aren't python developer, you can start by [this](http://lmgtfy.com/?iie=1
 
 ## Donations :dollar: :euro: :pound: :yen:
 
-<img src="https://raw.githubusercontent.com/zcash/logos/master/yellow-zcash-logo.png" width="20" height="20"/>   Donate **Zcash** to this address:
+Donate <img src="https://raw.githubusercontent.com/zcash/logos/master/yellow-zcash-logo.png" width="15" height="15"/> **Zcash** to this address:
 ```
 t1R7hecCF2kfiRVrEtnrUJZr57zKqDKRpvt
 ```
 ![zcash](https://user-images.githubusercontent.com/9158844/36625316-3c14cba8-192e-11e8-9c2d-3855fda623b7.png)
+<img src="https://raw.githubusercontent.com/zcash/logos/master/yellow-zcash-logo.png" width="60" height="60"/>
 ---
 
 <br><br>
 
-<img src="https://github.com/webcyou/crypto-currency-icon/blob/master/design/images/default/1.png" width="20" height="20"/>   Donate **Bitcoin** to this address:
+Donate <img src="https://github.com/webcyou/crypto-currency-icon/blob/master/design/images/default/1.png" width="15" height="15"/> **Bitcoin** to this address:
 
 ```
 3AQQg87vY31RPCKRrDrkHQijP9nsVY7mtb
 ```
 ![bitcoin](https://user-images.githubusercontent.com/9158844/36625315-3bf470ec-192e-11e8-8dc4-e8ea15b00a6f.png)
+<img src="https://github.com/webcyou/crypto-currency-icon/blob/master/design/images/default/1.png" width="60" height="60"/>
 ---
 
 <br><br>
 
-<img src="https://github.com/webcyou/crypto-currency-icon/blob/master/design/images/default/3.png" width="20" height="20"/>   Donate **Ethereum** to this address:
+Donate <img src="https://github.com/webcyou/crypto-currency-icon/blob/master/design/images/default/3.png" width="15" height="15"/> **Ethereum** to this address:
 
 ```
 0xc5b82006d2aba5269d2f8ca6d1dc81d3331c3c02
 ```
 ![ethereum](https://user-images.githubusercontent.com/9158844/36625314-3bd89dd6-192e-11e8-984d-a1e61c4a0ffa.png)
+<img src="https://github.com/webcyou/crypto-currency-icon/blob/master/design/images/default/3.png" width="60" height="60"/> 
 ---
