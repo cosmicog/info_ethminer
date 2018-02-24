@@ -61,7 +61,7 @@ class FlyInfo:
         try:
             return str(int(value))
         except:
-            return '0.0'
+            return '0'
 
     def strF0(self, value, perc=None): # returns float's str or '0.0'
         try:
@@ -70,7 +70,7 @@ class FlyInfo:
             else:
                 return str(perc % float(value))
         except:
-            return '0'
+            return '0.0'
 
     def printDotInfo(self, info=None):
         if info == None:
