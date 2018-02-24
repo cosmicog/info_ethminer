@@ -39,25 +39,25 @@ If you aren't python developer, you can start by [this](http://lmgtfy.com/?iie=1
 >>```
 >>t1R7hecCF2kfiRVrEtnrUJZr57zKqDKRpvt
 >>```
->>![zcash_kraken](https://user-images.githubusercontent.com/9158844/36625316-3c14cba8-192e-11e8-9c2d-3855fda623b7.png)
-
+>>![zcash](https://user-images.githubusercontent.com/9158844/36625316-3c14cba8-192e-11e8-9c2d-3855fda623b7.png)
+---
 
 <br><br>
 
 <img src="https://github.com/webcyou/crypto-currency-icon/blob/master/design/images/default/1.png" width="20" height="20"/>   Donate **Bitcoin** to this address:
 
->>![bitcoin_btc_turk](https://user-images.githubusercontent.com/9158844/36625315-3bf470ec-192e-11e8-8dc4-e8ea15b00a6f.png)
 >>```
 >>3AQQg87vY31RPCKRrDrkHQijP9nsVY7mtb
 >>```
-
+>>![bitcoin](https://user-images.githubusercontent.com/9158844/36625315-3bf470ec-192e-11e8-8dc4-e8ea15b00a6f.png)
+---
 
 <br><br>
 
 <img src="https://github.com/webcyou/crypto-currency-icon/blob/master/design/images/default/3.png" width="20" height="20"/>   Donate **Ethereum** to this address:
 
->>![ethereum_btcturk](https://user-images.githubusercontent.com/9158844/36625314-3bd89dd6-192e-11e8-984d-a1e61c4a0ffa.png)
 >>```
 >>0xc5b82006d2aba5269d2f8ca6d1dc81d3331c3c02
 >>```
-
+>>![ethereum](https://user-images.githubusercontent.com/9158844/36625314-3bd89dd6-192e-11e8-984d-a1e61c4a0ffa.png)
+---
