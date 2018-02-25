@@ -2,7 +2,7 @@
 
 Here is screenshot of code when running once:
 
-![Screenshot of info when running once](https://user-images.githubusercontent.com/9158844/36625103-2595343e-192a-11e8-8f73-935c34efc1c2.png)
+![Screenshot of info when running once](https://user-images.githubusercontent.com/9158844/36637387-fcda0c5a-19eb-11e8-9930-aa374f00fbd4.png)
 
 ## Usage
 
