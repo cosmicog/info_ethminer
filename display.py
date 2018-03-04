@@ -178,8 +178,8 @@ class FlyInfo:
 
         table1 = []
 
-        immatu = float( int(self.strI0(self.miner_["unpaid"])) ) / 100000000.0
-        unpaid  =float( int(self.strI0(self.miner_["unconfirmed"])) ) / 100000000.0
+        unpaid = float( int(self.strI0(self.miner_["unpaid"])) ) / 100000000.0
+        immatu  =float( int(self.strI0(self.miner_["unconfirmed"])) ) / 100000000.0
 
         row1 = [Color('{autoyellow}Immature{/autoyellow} ZEC\n{autocyan}' + str(immatu) + '{/autocyan}'),
                 Color('{autoyellow}Unpaid{/autoyellow} ZEC\n{autocyan}'   + str(unpaid) + '{/autocyan}'),
