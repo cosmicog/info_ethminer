@@ -27,10 +27,11 @@ class FlyInfo:
         Windows.enable(auto_colors=True, reset_atexit=True)  # For just Windows
         self.wallet_ = wallet
 
-        self.ZEC_usd_ = 0
-        self.BTC_usd_ = 0
+        self.ZEC_usd_ = 0.0
+        self.BTC_usd_ = 0.0
 
         self.time_str_ = "Hello Buddy!"
+        self.total_mined_ = 0.0
 
         self.stats_table_ = []
         self.workers_table_ = []
@@ -67,7 +68,9 @@ class FlyInfo:
         self.clearScreen()
         print(self.stats_table_.table)
         print(self.workers_table_.table)
-        self.time_str_ = time.strftime('Last update: {autoyellow}%d/%m/%Y{/autoyellow} {autocyan}%H:%M:%S {/autocyan}', datetime.datetime.now().timetuple())
+        self.time_str_ = time.strftime('{autocyan}'+ self.strF0(self.total_mined_, "%.5f")+
+                        '{/autocyan} ZEC - {autoyellow}Last update{/autoyellow}: %d/%m/%Y {autocyan}%H:%M:%S {/autocyan}',
+                        datetime.datetime.now().timetuple())
         print(Color(self.time_str_))
 
     def printDotInfo(self, info=None):
@@ -180,6 +183,7 @@ class FlyInfo:
 
         unpaid = float( int(self.strI0(self.miner_["unpaid"])) ) / 100000000.0
         immatu  =float( int(self.strI0(self.miner_["unconfirmed"])) ) / 100000000.0
+        self.total_mined_ = unpaid + immatu
 
         row1 = [Color('{autoyellow}Immature{/autoyellow} ZEC\n{autocyan}' + str(immatu) + '{/autocyan}'),
                 Color('{autoyellow}Unpaid{/autoyellow} ZEC\n{autocyan}'   + str(unpaid) + '{/autocyan}'),
@@ -187,12 +191,17 @@ class FlyInfo:
                 Color('{autoyellow}Average{/autoyellow}\n{autocyan}' + self.strF0(self.miner_["averageHashrate"], "%.1f") + '{/autocyan} H/s'),
              ]
         table1.append(row1)
+
+        self.printDotInfo()
+
         row2 = [Color('{autoyellow}ZEC {/autoyellow}${autogreen}'         + self.strF0(self.ZEC_usd_) + '{/autogreen}\n{autoyellow}BTC {/autoyellow}${autogreen}' + str(self.BTC_usd_) + '{/autogreen}'),
                 Color('{autoyellow}Est. Month{/autoyellow}\n'             + self.strF0((43200 * self.miner_["coinsPerMin"]), "%.4f" ) + ' ZEC' ),
                 Color('{autoyellow}Est. Month{/autoyellow}\n${autogreen}' + self.strF0((43200 * self.miner_["usdPerMin"]),  "%.4f")   +'{/autogreen}'),
                 Color('{autoyellow}Est. Month{/autoyellow}\nɃ{autocyan}'  + self.strF0((43200 * self.miner_["btcPerMin"]),  "%.4f")   + '{/autocyan}'),
              ]
         table1.append(row2)
+
+        self.printDotInfo()
 
         self.stats_table_ = SingleTable(table1)
         self.stats_table_.inner_heading_row_border = False
@@ -212,11 +221,13 @@ class FlyInfo:
                    Color('{autoyellow}Average{/autoyellow}\n{autocyan}' + self.strF0(avgr, "%.2f") + '{/autocyan} H/s'),
                   ]
             table2.append(row)
+            self.printDotInfo()
 
         self.workers_table_ = SingleTable(table2)
         self.workers_table_.inner_heading_row_border = False
         self.workers_table_.inner_row_border = True
         self.workers_table_.justify_columns = {0: 'center', 1: 'center', 2: 'center', 3: 'center'}
+        self.printDotInfo()
 
 
 def main():
