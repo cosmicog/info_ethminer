@@ -123,10 +123,10 @@ class FlyInfo:
             self.dot_count_ = 0
 
     def getValues(self):
-        self.ZEC_usd_ = self.getValueInOtherCurrency('ZEC', 1, 'USD')
-        self.BTC_usd_ = self.getValueInOtherCurrency('BTC', 1, 'USD')
+        self.ZEC_usd_ = self.getValueInOtherCurrency('ZEC', 1, 'USD', True)
+        self.BTC_usd_ = self.getValueInOtherCurrency('BTC', 1, 'USD', True)
 
-    def getValueInOtherCurrency(self, curency, amount, other_currency):
+    def getValueInOtherCurrency(self, curency, amount, other_currency, use_dot=None ):
         if curency.upper() == other_currency.upper(): # No need to convert
             return amount
         url = "https://min-api.cryptocompare.com/data/price?fsym={}&tsyms={}".format(curency.upper(), other_currency.upper())
@@ -134,12 +134,24 @@ class FlyInfo:
         json_dict = response.json()
         price = json_dict[other_currency.upper()]
         value = float(price) * float(amount)
+        if use_dot != None:
+            self.printDotInfo()
         return value
 
-    def getJsonDict(self, command_type, wallet, method):
+    def getFlpJsonDict(self, command_type, wallet, method, use_dot = None):
         url="https://api-zcash.flypool.org/{}/{}/{}".format(command_type, wallet, method)
         response = requests.get(url, timeout=10)
-        json_dict = response.json()
+        json_dict = {}
+        try:
+            json_dict = response.json()
+        except ValueError:
+            print()
+            print()
+            print(Color('{autored}Website didn\'t response with a valid json:{/autored}'))
+            print(response.content)
+            exit()
+        if use_dot != None:
+            self.printDotInfo()
         return json_dict
 
     def strI0(self, value): # returns integer's str or '0.0'
@@ -159,35 +171,28 @@ class FlyInfo:
 
     def getStats(self):
 
-        json_dict = self.getJsonDict('miner', self.wallet_, 'currentStats')
-        self.miner_ = json_dict['data']
-        json_dict = self.getJsonDict('miner', self.wallet_, 'workers')
-        self.worker_ = json_dict['data']
+        json_dict = self.getFlpJsonDict('miner', self.wallet_, 'currentStats', True)
+        self.miner_ = json_dict["data"]
+        json_dict = self.getFlpJsonDict('miner', self.wallet_, 'workers', True)
+        self.worker_ = json_dict["data"]
 
         table1 = []
 
-        total_mined = float(int(self.strI0(self.miner_["unpaid"])) + int(self.strI0(self.miner_["unconfirmed"]))) / 100000000.0
-        act_str = time.strftime('{autoyellow}%d/%m/%Y{/autoyellow}\n{autocyan}%H:%M:%S {/autocyan}UTC',  time.gmtime(self.miner_["time"]))
-        lst_str = time.strftime('{autoyellow}%d/%m/%Y{/autoyellow}\n{autocyan}%H:%M:%S {/autocyan}UTC',  time.gmtime(self.miner_["lastSeen"]))
+        immatu = float( int(self.strI0(self.miner_["unpaid"])) ) / 100000000.0
+        unpaid  =float( int(self.strI0(self.miner_["unconfirmed"])) ) / 100000000.0
 
-        row1 = [Color('{autoyellow}Statistic time{/autoyellow}\n' + act_str),
-                Color('{autoyellow}Last seen{/autoyellow}\n' + lst_str),
-                Color('{autoyellow}Current{/autoyellow}\n{autocyan}' + self.strF0(self.miner_["currentHashrate"], "%.1f" ) +'{/autocyan}\nH/s'),
-                Color('{autoyellow}Average{/autoyellow}\n{autocyan}' + self.strF0(self.miner_["averageHashrate"], "%.1f") + '{/autocyan}\nH/s'),
+        row1 = [Color('{autoyellow}Immature{/autoyellow} ZEC\n{autocyan}' + str(immatu) + '{/autocyan}'),
+                Color('{autoyellow}Unpaid{/autoyellow} ZEC\n{autocyan}'   + str(unpaid) + '{/autocyan}'),
+                Color('{autoyellow}Current{/autoyellow}\n{autocyan}' + self.strF0(self.miner_["currentHashrate"], "%.1f" ) +'{/autocyan} H/s'),
+                Color('{autoyellow}Average{/autoyellow}\n{autocyan}' + self.strF0(self.miner_["averageHashrate"], "%.1f") + '{/autocyan} H/s'),
              ]
         table1.append(row1)
-        row2 = [Color('{autoyellow}Mined Total{/autoyellow}\n{autocyan}'  + self.strF0(total_mined, "%.7f" )         + '{/autocyan} ZEC'),
-                Color('{autoyellow}Accepted{/autoyellow}\n'+'{autogreen}' + self.strI0(self.miner_["validShares"])   + '{/autogreen}'),
-                Color('{autoyellow}Rejected{/autoyellow}\n'+'{autored}'   + self.strI0(self.miner_["invalidShares"]) + '{/autored}'),
-                Color('{autoyellow}Workers{/autoyellow}\n'                + self.strI0(self.miner_["activeWorkers"])),
-             ]
-        table1.append(row2)
-        row3 = [Color('{autoyellow}ZEC {/autoyellow}${autogreen}'         + self.strF0(self.ZEC_usd_) + '{/autogreen}\n{autoyellow}BTC {/autoyellow}${autogreen}' + str(self.BTC_usd_) + '{/autogreen}'),
+        row2 = [Color('{autoyellow}ZEC {/autoyellow}${autogreen}'         + self.strF0(self.ZEC_usd_) + '{/autogreen}\n{autoyellow}BTC {/autoyellow}${autogreen}' + str(self.BTC_usd_) + '{/autogreen}'),
                 Color('{autoyellow}Est. Month{/autoyellow}\n'             + self.strF0((43200 * self.miner_["coinsPerMin"]), "%.4f" ) + ' ZEC' ),
                 Color('{autoyellow}Est. Month{/autoyellow}\n${autogreen}' + self.strF0((43200 * self.miner_["usdPerMin"]),  "%.4f")   +'{/autogreen}'),
                 Color('{autoyellow}Est. Month{/autoyellow}\nɃ{autocyan}'  + self.strF0((43200 * self.miner_["btcPerMin"]),  "%.4f")   + '{/autocyan}'),
              ]
-        table1.append(row3)
+        table1.append(row2)
 
         self.stats_table_ = SingleTable(table1)
         self.stats_table_.inner_heading_row_border = False
@@ -200,7 +205,9 @@ class FlyInfo:
             name = worker['worker']
             curr = worker['currentHashrate']
             avgr = worker['averageHashrate']
-            row = [Color('{autoyellow}' + str(name) + '{/autoyellow}'),
+            vali = worker['validShares']
+            inva = worker['invalidShares']
+            row = [Color('{autoyellow}' + str(name) + '{/autoyellow}\n({autogreen}' + str(vali) + '{/autogreen},{autored}' + str(inva) + '{/autored})'),
                    Color('{autoyellow}Current{/autoyellow}\n{autocyan}'+ self.strF0(curr, "%.2f") +'{/autocyan} H/s'),
                    Color('{autoyellow}Average{/autoyellow}\n{autocyan}' + self.strF0(avgr, "%.2f") + '{/autocyan} H/s'),
                   ]
