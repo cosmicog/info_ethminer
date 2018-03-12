@@ -11,7 +11,7 @@ import requests
 import sys
 import signal
 
-parser = argparse.ArgumentParser(description="Zcash flypool Information Gatherer")
+parser = argparse.ArgumentParser(description="Ethereum ethminer.org Information Gatherer")
 parser.add_argument('-w', metavar='wallet_address', required=True, help='Your t Address which you are mining to')
 parser.add_argument('-n', metavar='non_stop', help=' Not needed, if equals \'YES\', run the application continuously, updates tables in 2 minutes')
 args = parser.parse_args()
@@ -27,7 +27,7 @@ class FlyInfo:
         Windows.enable(auto_colors=True, reset_atexit=True)  # For just Windows
         self.wallet_ = wallet
 
-        self.ZEC_usd_ = 0.0
+        self.ETH_usd_ = 0.0
         self.BTC_usd_ = 0.0
 
         self.time_str_ = "Hello Buddy!"
@@ -35,6 +35,7 @@ class FlyInfo:
 
         self.stats_table_ = []
         self.workers_table_ = []
+        self.values_table_ = []
 
         self.miner_  = {}
         self.worker_ = {}
@@ -68,8 +69,7 @@ class FlyInfo:
         self.clearScreen()
         print(self.stats_table_.table)
         print(self.workers_table_.table)
-        self.time_str_ = time.strftime('{autocyan}'+ self.strF0(self.total_mined_, "%.5f")+
-                        '{/autocyan} ZEC - {autoyellow}Last update{/autoyellow}: %d/%m/%Y {autocyan}%H:%M:%S {/autocyan}',
+        self.time_str_ = time.strftime('{autoyellow}Last update{/autoyellow}: %d/%m/%Y {autocyan}%H:%M:%S {/autocyan}',
                         datetime.datetime.now().timetuple())
         print(Color(self.time_str_))
 
@@ -126,8 +126,10 @@ class FlyInfo:
             self.dot_count_ = 0
 
     def getValues(self):
-        self.ZEC_usd_ = self.getValueInOtherCurrency('ZEC', 1, 'USD', True)
+        self.ETH_usd_ = self.getValueInOtherCurrency('ETH', 1, 'USD', True)
         self.BTC_usd_ = self.getValueInOtherCurrency('BTC', 1, 'USD', True)
+        self.printDotInfo()
+
 
     def getValueInOtherCurrency(self, curency, amount, other_currency, use_dot=None ):
         if curency.upper() == other_currency.upper(): # No need to convert
@@ -142,7 +144,7 @@ class FlyInfo:
         return value
 
     def getFlpJsonDict(self, command_type, wallet, method, use_dot = None):
-        url="https://api-zcash.flypool.org/{}/{}/{}".format(command_type, wallet, method)
+        url="https://api.ethermine.org/{}/{}/{}".format(command_type, wallet, method)
         response = requests.get(url, timeout=10)
         json_dict = {}
         try:
@@ -181,44 +183,51 @@ class FlyInfo:
 
         table1 = []
 
-        unpaid = float( int(self.strI0(self.miner_["unpaid"])) ) / 100000000.0
-        immatu  =float( int(self.strI0(self.miner_["unconfirmed"])) ) / 100000000.0
+        unpaid = float( int(self.strI0(self.miner_["unpaid"])) ) / 1000000000000000000.0
+        immatu  =float( int(self.strI0(self.miner_["unconfirmed"])) ) / 1000000000000000000.0
         self.total_mined_ = unpaid + immatu
 
-        row1 = [Color('{autoyellow}Immature{/autoyellow} ZEC\n{autocyan}' + str(immatu) + '{/autocyan}'),
-                Color('{autoyellow}Unpaid{/autoyellow} ZEC\n{autocyan}'   + str(unpaid) + '{/autocyan}'),
-                Color('{autoyellow}Current{/autoyellow}\n{autocyan}' + self.strF0(self.miner_["currentHashrate"], "%.1f" ) +'{/autocyan} H/s'),
-                Color('{autoyellow}Average{/autoyellow}\n{autocyan}' + self.strF0(self.miner_["averageHashrate"], "%.1f") + '{/autocyan} H/s'),
-             ]
+        row1 = [
+        Color('{autoyellow}Unpaid{/autoyellow} ETH\n{autocyan}'   + self.strF0(unpaid, "%.5f") + '{/autocyan}'),
+        Color('{autoyellow}Current{/autoyellow}\n{autocyan}' + self.strF0(self.miner_["currentHashrate"] /1000000, "%.1f" ) +'{/autocyan} MH/s'),
+        Color('{autoyellow}Average{/autoyellow}\n{autocyan}' + self.strF0(self.miner_["averageHashrate"] /1000000, "%.1f") + '{/autocyan} MH/s'),
+        ]
         table1.append(row1)
 
         self.printDotInfo()
 
-        row2 = [Color('{autoyellow}ZEC {/autoyellow}${autogreen}'         + self.strF0(self.ZEC_usd_) + '{/autogreen}\n{autoyellow}BTC {/autoyellow}${autogreen}' + str(self.BTC_usd_) + '{/autogreen}'),
-                Color('{autoyellow}Est. Month{/autoyellow}\n'             + self.strF0((43200 * self.miner_["coinsPerMin"]), "%.4f" ) + ' ZEC' ),
-                Color('{autoyellow}Est. Month{/autoyellow}\n${autogreen}' + self.strF0((43200 * self.miner_["usdPerMin"]),  "%.4f")   +'{/autogreen}'),
-                Color('{autoyellow}Est. Month{/autoyellow}\nɃ{autocyan}'  + self.strF0((43200 * self.miner_["btcPerMin"]),  "%.4f")   + '{/autocyan}'),
-             ]
+        row2 = [
+        Color('{autoyellow}Est. Month{/autoyellow}\n⧫{autocyan}'  + self.strF0((43200 * self.miner_["coinsPerMin"]), "%.4f" ) + '{/autocyan}'),
+        Color('{autoyellow}Est. Month{/autoyellow}\n${autogreen}' + self.strF0((43200 * self.miner_["usdPerMin"]),  "%.4f")   +'{/autogreen}'),
+        Color('{autoyellow}Est. Month{/autoyellow}\nɃ{autocyan}'  + self.strF0((43200 * self.miner_["btcPerMin"]),  "%.4f")   + '{/autocyan}'),
+        ]
         table1.append(row2)
+
+        row3 = [
+        Color('{autoyellow}Est. Day{/autoyellow}\n⧫{autocyan}'  + self.strF0((1440 * self.miner_["coinsPerMin"]), "%.4f" ) + '{/autocyan}'),
+        Color('{autoyellow}Ethereum{/autoyellow}\n${autogreen}' + self.strF0(self.ETH_usd_) + '{/autogreen}'),
+        Color('{autoyellow}Bitcoin{/autoyellow}\n${autogreen}' + str(self.BTC_usd_) + '{/autogreen}')
+        ]
+        table1.append(row3)
 
         self.printDotInfo()
 
         self.stats_table_ = SingleTable(table1)
         self.stats_table_.inner_heading_row_border = False
         self.stats_table_.inner_row_border = True
-        self.stats_table_.justify_columns = {0: 'center', 1: 'center', 2: 'center', 3: 'center'}
+        self.stats_table_.justify_columns = {0: 'center', 1: 'center', 2: 'center'}
 
         table2 = []
 
         for worker in self.worker_:
             name = worker['worker']
-            curr = worker['currentHashrate']
-            avgr = worker['averageHashrate']
+            curr = worker['currentHashrate'] / 1000000
+            avgr = worker['averageHashrate'] / 1000000
             vali = worker['validShares']
             inva = worker['invalidShares']
             row = [Color('{autoyellow}' + str(name) + '{/autoyellow}\n({autogreen}' + str(vali) + '{/autogreen},{autored}' + str(inva) + '{/autored})'),
-                   Color('{autoyellow}Current{/autoyellow}\n{autocyan}'+ self.strF0(curr, "%.2f") +'{/autocyan} H/s'),
-                   Color('{autoyellow}Average{/autoyellow}\n{autocyan}' + self.strF0(avgr, "%.2f") + '{/autocyan} H/s'),
+                   Color('{autoyellow}Current{/autoyellow}\n{autocyan}'+ self.strF0(curr, "%.2f") +'{/autocyan} MH/s'),
+                   Color('{autoyellow}Average{/autoyellow}\n{autocyan}' + self.strF0(avgr, "%.2f") + '{/autocyan} MH/s'),
                   ]
             table2.append(row)
             self.printDotInfo()
